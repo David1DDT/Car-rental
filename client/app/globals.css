@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@plugin "flyonui";
+@import "flyonui/variants.css";
+@source "./node_modules/flyonui/flyonui.js";
+@import "flatpickr/dist/flatpickr.min.css";
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Titillium Web", sans-serif;
+}
+
+.advance-select-menu {
+  margin-top: 1px !important;
+}
+
