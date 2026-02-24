@@ -10,9 +10,10 @@ interface DatePickerInputProps {
   maxDate?: Date;
   onChange?: (date: Date | null) => void;
   value?: Date | null;
+  className?: string;
 }
 
-export default function DatePickerInput({ placeholder, minDate, maxDate, onChange, value }: DatePickerInputProps) {
+export default function DatePickerInput({ placeholder, minDate, maxDate, onChange, value, className }: DatePickerInputProps) {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const instanceRef = useRef<Instance | null>(null);
@@ -57,7 +58,7 @@ export default function DatePickerInput({ placeholder, minDate, maxDate, onChang
     <input
       ref={inputRef}
       type="text"
-      className="input input-lg input-bordered w-56"
+      className={className || "input input-md input-bordered w-full"}
       placeholder={placeholder}
       id="flatpickr-date"
     />

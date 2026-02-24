@@ -3,7 +3,11 @@
 import { useRef, useEffect } from 'react';
 import flatpickr from 'flatpickr';
 
-export default function TimePickerInput() {
+interface TimePickerInputProps {
+  className?: string;
+}
+
+export default function TimePickerInput({ className }: TimePickerInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,7 +30,7 @@ export default function TimePickerInput() {
     <input
       ref={inputRef}
       type="text"
-      className="input input-lg input-bordered w-36"
+      className={className || "input input-md input-bordered w-full"}
       placeholder="⏲ HH:MM"
       id="flatpickr-time"
     />
