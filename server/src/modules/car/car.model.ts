@@ -1,6 +1,6 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
 
-class Reservation {
+export class Reservation {
     @prop({required: true, type: () => Date})
     public startDate!: Date
 

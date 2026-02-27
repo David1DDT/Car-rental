@@ -1,41 +1,19 @@
 import type { Request, Response } from "express"
 import { CarModel } from "./car.model.js"
 
-interface findCarsInterface {
-    startDate: Date,
-    endDate: Date,
-    loc: string
+
+
+export const getCarsByLocationAndDate = (req: Request, res: Response) => {
+  return res.status(200).json({ cars: res.locals.cars })
 }
 
-export const getCarsByLocationAndDate = async (req: Request<{}, {}, findCarsInterface>, res: Response) => {
-    const {startDate, endDate, loc} = req.body
 
-    if (!startDate || !endDate ||  !loc ){
-        return res.status(500).send("invalid params")
-    }
-
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    const now = new Date()
-if (!(start.getTime() < end.getTime()) || !(start.getTime() < now.getTime())){}
-      const cars = await CarModel.find({
-    location: loc,
-    $or: [
-      { reservations: { $exists: false } },
-      { reservations: { $size: 0 } },
-      {
-        reservations: {
-          $not: {
-            $elemMatch: {
-              startDate: { $lte: endDate },
-              endDate: { $gte: startDate }
-            }
-          }
-        }
-      }
-    ]
-  })
-    
-  return res.status(200).json({cars})
-    
+export const verifyCarAvailability = async (req: Request, res: Response) => {
+  const car = CarModel.findById(req.body.id)
+  if (!res.locals.cars.includes(car) || !car) {
+    return res.status(400).send("car not avalible")
+  }
+  return res.status(200).send("car avalible")
 }
+
+
