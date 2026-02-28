@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCheckoutSession, webhookHandler } from "./order.controller.js";
+import { createCheckoutSession, createOrder, webhookHandler } from "./order.controller.js";
 import { getCars, verifyCarAvailability } from "../../middleware/findCars.js";
 import express from "express"
 
@@ -11,5 +11,6 @@ orderRouter.post(
     express.raw({ type: "application/json" }), // must be exact
     webhookHandler
 )
+orderRouter.post("/create-order", express.json(), getCars, verifyCarAvailability, createOrder)
 
 export default orderRouter 

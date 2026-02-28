@@ -5,6 +5,58 @@ import { daysBetween } from "./order.service.js"
 import { Order, orderModel } from "./order.model.js"
 
 
+export const createOrder = async (req: Request, res: Response) => {
+    const { startDate, endDate, loc, carId, customerType, email, phone, name, address } = req.body
+    const { d1, d2 } = { d1: new Date(startDate), d2: new Date(endDate) }
+    if (!startDate || !endDate || !loc || !carId || !email || !phone || !name || !address) {
+        return res.status(400).send("error all params are required")
+    }
+    const timeInterval = daysBetween(d1, d2)
+    const car = await CarModel.findById(carId)
+    if (!car) {
+        return res.status(400).send("invalid params")
+    }
+    if (customerType === "physical") {
+        const order = await orderModel.create({
+            customerType: customerType,
+            person: {
+                name: name,
+                email: email,
+                address: address,
+                phone: phone
+            },
+            car: car,
+            currency: "eur",
+            plata: "fizic",
+            location: loc,
+            timeInterval: { startDate: d1, endDate: d2 }
+        })
+    } else if (customerType === "juridical") {
+        const registrationNumber = req.body.registrationNumber
+        if (!registrationNumber) {
+            res.status(400).send("invalid request")
+        }
+        const order = await orderModel.create({
+            customerType: customerType,
+            person: {
+                companyName: name,
+                registrationNumber: registrationNumber,
+                email: email,
+                address: address,
+                phone: phone
+            },
+            car: car,
+            currency: "eur",
+            plata: "fizic",
+            location: loc
+        })
+    } else {
+        return res.status(400).send("invalid params")
+    }
+
+    return res.status(200).send("order created")
+}
+
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
     const { startDate, endDate, loc, carId, customerType, email, phone, name, address } = req.body
@@ -39,7 +91,8 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         success_url: `${process.env.FRONTEND_URL}/success`,
         cancel_url: `${process.env.FRONTEND_URL}/cancel`,
     })
-    console.log(session.id)
+
+    console.log(session.amount_total)
     if (customerType === "physical") {
         const order = await orderModel.create({
             customerType: customerType,
@@ -55,7 +108,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
             orderId: session.id,
             paymentStatus: "pending",
             location: loc,
-            timeInterval: { startDate: d1, endDate: d2 }
+            timeInterval: { startDate: d1, endDate: d2 },
         })
     } else if (customerType === "juridical") {
         const registrationNumber = req.body.registrationNumber

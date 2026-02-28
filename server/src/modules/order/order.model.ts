@@ -60,7 +60,7 @@ export class Order {
   @prop({ type: () => String })
   orderId?: string
 
-  @prop({ default: "pending", type: () => String })
+  @prop({ type: () => String })
   paymentStatus?: "pending" | "paid" | "failed";
 
   @prop({ required: true, type: () => String })
