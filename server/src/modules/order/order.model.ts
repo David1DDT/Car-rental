@@ -51,7 +51,7 @@ export class Order {
   timeInterval!: Reservation
 
   @prop({ required: true, type: () => String })
-  currency!: string; // "eur", "ron", etc
+  currency!: string;
 
   @prop({ required: true, type: () => String })
   plata!: "online" | "fizic"

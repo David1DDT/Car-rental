@@ -2,15 +2,15 @@ import type { Request, Response } from "express"
 import { CarModel } from "../car/car.model.js"
 import { stripe } from "../../utils/stripe.js"
 import { daysBetween } from "./order.service.js"
-import { orderModel } from "./order.model.js"
+import { Order, orderModel } from "./order.model.js"
 
 
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
-    const { startDate, endDate, loc, carId } = req.body
+    const { startDate, endDate, loc, carId, customerType, email, phone, name, address } = req.body
 
     const { d1, d2 } = { d1: new Date(startDate), d2: new Date(endDate) }
-    if (!startDate || !endDate || !loc || !carId) {
+    if (!startDate || !endDate || !loc || !carId || !email || !phone || !name || !address) {
         return res.status(400).send("error all params are required")
     }
 
@@ -40,6 +40,48 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         cancel_url: `${process.env.FRONTEND_URL}/cancel`,
     })
     console.log(session.id)
+    if (customerType === "physical") {
+        const order = await orderModel.create({
+            customerType: customerType,
+            person: {
+                name: name,
+                email: email,
+                address: address,
+                phone: phone
+            },
+            car: car,
+            currency: "eur",
+            plata: "online",
+            orderId: session.id,
+            paymentStatus: "pending",
+            location: loc,
+            timeInterval: { startDate: d1, endDate: d2 }
+        })
+    } else if (customerType === "juridical") {
+        const registrationNumber = req.body.registrationNumber
+        if (!registrationNumber) {
+            res.status(400).send("invalid request")
+        }
+        const order = await orderModel.create({
+            customerType: customerType,
+            person: {
+                companyName: name,
+                registrationNumber: registrationNumber,
+                email: email,
+                address: address,
+                phone: phone
+            },
+            car: car,
+            currency: "eur",
+            plata: "online",
+            orderId: session.id,
+            paymentStatus: "pending",
+            location: loc
+        })
+    } else {
+        return res.status(400).send("invalid params")
+    }
+
     res.json({ url: session.url })
 }
 
@@ -52,16 +94,19 @@ export const webhookHandler = async (req: Request, res: Response) => {
         sig as any,
         process.env.STRIPE_WEBHOOK_SECRET || "key"
     )
-
-    if (event.context === "charge.succeeded") {
+    console.log(event.type)
+    console.log(event.data)
+    if (event.type === "checkout.session.completed") {
         // @ts-ignore
-        const orderId = event.data.object["payement_details"]["order_reference"]
+        const orderId = event.data.object.id
 
-        const order = await orderModel.find({ orderId: orderId })
+        const order = await orderModel.findOne({ orderId: orderId })
         if (!order) {
             return res.status(400).send("invalid request")
         }
-        order.payementStatus = "paid"
+
+        order.paymentStatus = "paid"
+        await order.save()
 
     }
     res.status(200).send()
