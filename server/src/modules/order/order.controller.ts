@@ -6,13 +6,13 @@ import { Order, orderModel } from "./order.model.js"
 
 
 export const createOrder = async (req: Request, res: Response) => {
-    const { startDate, endDate, loc, carId, customerType, email, phone, name, address } = req.body
+    const { startDate, endDate, loc, id, customerType, email, phone, name, address } = req.body
     const { d1, d2 } = { d1: new Date(startDate), d2: new Date(endDate) }
-    if (!startDate || !endDate || !loc || !carId || !email || !phone || !name || !address) {
+    if (!startDate || !endDate || !loc || !id || !email || !phone || !name || !address) {
         return res.status(400).send("error all params are required")
     }
     const timeInterval = daysBetween(d1, d2)
-    const car = await CarModel.findById(carId)
+    const car = await CarModel.findById(id)
     if (!car) {
         return res.status(400).send("invalid params")
     }
@@ -59,14 +59,14 @@ export const createOrder = async (req: Request, res: Response) => {
 
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
-    const { startDate, endDate, loc, carId, customerType, email, phone, name, address } = req.body
+    const { startDate, endDate, loc, id, customerType, email, phone, name, address } = req.body
 
     const { d1, d2 } = { d1: new Date(startDate), d2: new Date(endDate) }
-    if (!startDate || !endDate || !loc || !carId || !email || !phone || !name || !address) {
+    if (!startDate || !endDate || !loc || !id || !email || !phone || !name || !address) {
         return res.status(400).send("error all params are required")
     }
 
-    const car = await CarModel.findById(carId)
+    const car = await CarModel.findById(id)
     const timeInterval = daysBetween(d1, d2)
     if (!car) {
         return res.status(400).send("invalid params")
@@ -159,7 +159,16 @@ export const webhookHandler = async (req: Request, res: Response) => {
         }
 
         order.paymentStatus = "paid"
+        const car = await CarModel.findById(order.car._id)
+
+        if (!car) {
+            return res.status(400).send("invalid params")
+        }
+        car.reservations?.push(order.timeInterval)
+
+
         await order.save()
+        await car.save()
 
     }
     res.status(200).send()

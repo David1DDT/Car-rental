@@ -27,8 +27,9 @@ export const getCars = async (req: Request<{}, {}, findCarsInterface>, res: Resp
 }
 
 export const verifyCarAvailability = async (req: Request, res: Response, next: NextFunction) => {
-    const car = CarModel.findById(req.body.id)
-    if (!car) {
+    const car = await CarModel.findById(req.body.id)
+    console.log(car, res.locals.cars)
+    if (!car || !res.locals.cars.some((c: any) => c._id.toString() === car._id.toString())) {
         return res.status(400).send("car not avalible")
     }
     next()

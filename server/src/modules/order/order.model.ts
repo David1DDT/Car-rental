@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, prop, type Ref } from "@typegoose/typegoose";
 import { Car, Reservation } from "../car/car.model.js";
 
 
@@ -44,8 +44,8 @@ export class Order {
   person?: PhysicalPerson | JuridicalPerson;
 
 
-  @prop({ required: true, type: () => Car })
-  car!: Car
+  @prop({ required: true, type: () => Car, ref: () => Car })
+  car!: Ref<Car>
 
   @prop({ required: true, type: () => Reservation })
   timeInterval!: Reservation
