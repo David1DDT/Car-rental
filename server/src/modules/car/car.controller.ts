@@ -1,6 +1,6 @@
 import type { Request, Response } from "express"
 import { CarModel } from "./car.model.js"
-
+import path from "path"
 
 
 export const getCarsByLocationAndDate = (req: Request, res: Response) => {
@@ -17,3 +17,18 @@ export const verifyCarAvailability = async (req: Request, res: Response) => {
 }
 
 
+export const getImage = async (req: Request, res: Response) => {
+  const { imgName } = req.params
+  if (!imgName) return res.status(400).send("no imageID")
+  const img = path.resolve("uploads", imgName as string)
+  res.sendFile(img)
+}
+
+export const getCarById = async (req: Request, res: Response) => {
+  const id = req.body.id
+  if (!id) {
+    return res.status(400).send("invalid params")
+  }
+
+  return res.json({ car: await CarModel.findById(id) })
+}

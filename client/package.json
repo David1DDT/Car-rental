@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "dropzone": "^6.0.0-beta.2",
     "flatpickr": "^4.6.13",
+    "lodash": "^4.17.23",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"

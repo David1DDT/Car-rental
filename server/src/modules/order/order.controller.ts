@@ -6,9 +6,9 @@ import { Order, orderModel } from "./order.model.js"
 
 
 export const createOrder = async (req: Request, res: Response) => {
-    const { startDate, endDate, loc, id, customerType, email, phone, name, address } = req.body
+    const { startDate, endDate, loc, id, customerType, email, phone, name } = req.body
     const { d1, d2 } = { d1: new Date(startDate), d2: new Date(endDate) }
-    if (!startDate || !endDate || !loc || !id || !email || !phone || !name || !address) {
+    if (!startDate || !endDate || !loc || !id || !email || !phone || !name) {
         return res.status(400).send("error all params are required")
     }
     const timeInterval = daysBetween(d1, d2)
@@ -22,7 +22,7 @@ export const createOrder = async (req: Request, res: Response) => {
             person: {
                 name: name,
                 email: email,
-                address: address,
+
                 phone: phone
             },
             car: car,
@@ -42,7 +42,7 @@ export const createOrder = async (req: Request, res: Response) => {
                 companyName: name,
                 registrationNumber: registrationNumber,
                 email: email,
-                address: address,
+
                 phone: phone
             },
             car: car,
@@ -59,10 +59,10 @@ export const createOrder = async (req: Request, res: Response) => {
 
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
-    const { startDate, endDate, loc, id, customerType, email, phone, name, address } = req.body
+    const { startDate, endDate, loc, id, customerType, email, phone, name } = req.body
 
     const { d1, d2 } = { d1: new Date(startDate), d2: new Date(endDate) }
-    if (!startDate || !endDate || !loc || !id || !email || !phone || !name || !address) {
+    if (!startDate || !endDate || !loc || !id || !email || !phone || !name) {
         return res.status(400).send("error all params are required")
     }
 
@@ -81,7 +81,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                     currency: "eur",
                     product_data: {
                         name: car.name,
-                        images: car.images
+                        images: [`${process.env.BACKEND_URL}/api/cars/images/${car.images[0]}`]
                     },
                     unit_amount: car.price * 100
                 },
@@ -99,7 +99,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
             person: {
                 name: name,
                 email: email,
-                address: address,
+
                 phone: phone
             },
             car: car,
@@ -121,7 +121,6 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                 companyName: name,
                 registrationNumber: registrationNumber,
                 email: email,
-                address: address,
                 phone: phone
             },
             car: car,

@@ -33,7 +33,7 @@ export default function Home() {
       return;
     }
     router.push(
-      `/cars?startDate=${formatDateTimeParam(pickupDate, pickupTime)}&endDate=${formatDateTimeParam(returnDate, returnTime)}&location=${sameLocation ? "iasi" : ""}`
+      `/cars?startDate=${formatDateTimeParam(pickupDate, pickupTime)}&endDate=${formatDateTimeParam(returnDate, returnTime)}&location=${sameLocation ? "iași" : ""}`
     );
   };
 
@@ -69,7 +69,7 @@ export default function Home() {
                 </label>
                 <select required className="select select-bordered h-11 w-full rounded-md border-black/20 bg-white text-sm">
                   <option value="">Locatie preluare *</option>
-                  <option value="iasi">Iasi</option>
+                  <option value="iași">Iași</option>
                 </select>
               </div>
 
@@ -103,7 +103,7 @@ export default function Home() {
                 <div className="grid grid-cols-[1fr_108px] gap-2">
                   <DatePickerInput
                     placeholder="Data predare"
-                    minDate={pickupDate || tomorrow}
+                    minDate={pickupDate ? new Date(pickupDate.getTime() + 24 * 60 * 60 * 1000) : tomorrow}
                     onChange={setReturnDate}
                     value={returnDate}
                     required

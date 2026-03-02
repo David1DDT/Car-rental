@@ -5,6 +5,7 @@ import cors from "cors"
 import { connectToDatabase, disconnectDB } from "./utils/database.js"
 import { carRoute } from "./modules/car/car.route.js"
 import orderRouter from "./modules/order/order.route.js"
+import { adminRouter } from "./modules/admin/admin.route.js"
 
 
 const app = express()
@@ -18,7 +19,7 @@ app.use("/order", orderRouter)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("/api/cars", carRoute)
-
+app.use("/admin", adminRouter)
 
 const PORT = process.env.PORT || 4000
 
