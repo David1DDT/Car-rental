@@ -30,18 +30,24 @@ const AdminPage = () => {
     const categoryRef = useRef<HTMLInputElement>(null)
     const locationRef = useRef<HTMLSelectElement>(null)
 
+    const getToken = () => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('token') || ''
+        }
+        return ''
+    }
+
     const deleteClickHandler = async (_carId: string) => {
         if (!confirm("Esti sigur ca vrei sa stergi aceasta masina?")) {
             return
         }
 
-
-        const token = await cookieStore.get("token")
+        const token = getToken()
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"}/admin/delete-car`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: token?.value || "",
+                Authorization: token,
             },
             body: JSON.stringify({ id: _carId }),
 
@@ -101,12 +107,12 @@ const AdminPage = () => {
         }
 
         try {
-            const token = await cookieStore.get("token")
+            const token = getToken()
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"}/admin/upload-car`, {
                 method: "POST",
                 headers: {
                     application: "json",
-                    Authorization: token?.value || "",
+                    Authorization: token,
                 },
                 body: formData,
             })
@@ -118,7 +124,6 @@ const AdminPage = () => {
 
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-        const token = await cookieStore.get("token")
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const username = usernameRef.current?.value || formData.get("username")
@@ -128,11 +133,12 @@ const AdminPage = () => {
             return alert("all fields are required")
         }
 
+        const token = getToken()
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"}/admin/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: token?.value || "",
+                Authorization: token,
             },
             body: JSON.stringify({ username, password }),
         })
@@ -141,18 +147,18 @@ const AdminPage = () => {
         if (data.error) {
             return alert(data.error)
         }
-        await cookieStore.set({ name: "token", value: data.payload })
+        localStorage.setItem('token', data.payload)
         setAdmin(data)
     }
     useEffect(() => {
         const fetchAdmin = async () => {
-            const token = await cookieStore.get("token")
+            const token = getToken()
             if (token) {
                 await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:4000"}/admin/me`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: token.value || "",
+                        Authorization: token,
                     },
                 })
                     .then((res) => res.json())

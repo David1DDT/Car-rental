@@ -12,21 +12,37 @@ export default function FlyonuiScript() {
 
   useEffect(() => {
     const initFlyonUI = async () => {
-      await loadFlyonUI();
+      try {
+        await loadFlyonUI();
+      } catch (error) {
+        console.warn('Failed to load FlyonUI:', error);
+      }
     };
 
     initFlyonUI();
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
+    const initializeOverlays = () => {
       if (
+        typeof window !== 'undefined' &&
         window.HSStaticMethods &&
         typeof window.HSStaticMethods.autoInit === 'function'
       ) {
-        window.HSStaticMethods.autoInit();
+        try {
+          window.HSStaticMethods.autoInit();
+        } catch (error) {
+          console.warn('FlyonUI autoInit failed:', error);
+        }
       }
-    }, 100);
+    };
+
+    // Try initialization with increasing delays to ensure DOM is ready
+    const timeouts = [100, 300, 500].map(delay =>
+      setTimeout(initializeOverlays, delay)
+    );
+
+    return () => timeouts.forEach(timeout => clearTimeout(timeout));
   }, [path]);
 
   return null;

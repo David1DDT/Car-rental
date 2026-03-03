@@ -10,7 +10,7 @@ import { adminRouter } from "./modules/admin/admin.route.js"
 
 const app = express()
 app.use(cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://localhost:3000", "https://127.0.0.1:3000"],
+    origin: process.env.FRONTEND_URL,
     credentials: true
 }))
 // Webhook route must come BEFORE body parsing middleware

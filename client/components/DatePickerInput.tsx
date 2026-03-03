@@ -24,6 +24,7 @@ export default function DatePickerInput({ placeholder, minDate, maxDate, onChang
       instanceRef.current = flatpickr(inputRef.current, {
         monthSelectorType: 'static',
         mode: 'single',
+        disableMobile: true,
         minDate: minDate,
         maxDate: maxDate,
         onChange: (selectedDates) => {
@@ -61,7 +62,6 @@ export default function DatePickerInput({ placeholder, minDate, maxDate, onChang
       type="text"
       className={className || "input input-md input-bordered w-full"}
       placeholder={placeholder}
-      id="flatpickr-date"
       required={required}
     />
   );

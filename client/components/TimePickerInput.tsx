@@ -19,6 +19,7 @@ export default function TimePickerInput({ className, required, onChange, value }
         enableTime: true,
         noCalendar: true,
         dateFormat: 'H:i',
+        disableMobile: true,
         onChange: (_, dateStr) => {
           if (onChange) {
             onChange(dateStr);
@@ -46,7 +47,6 @@ export default function TimePickerInput({ className, required, onChange, value }
       type="text"
       className={className || "input input-md input-bordered w-full"}
       placeholder="⏲ HH:MM"
-      id="flatpickr-time"
       required={required}
     />
   );
