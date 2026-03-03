@@ -1,7 +1,8 @@
 
 'use client'
 
-import { useState, use, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface CarData {
     _id: string
@@ -15,11 +16,15 @@ interface CarData {
     images: string[]
 }
 
-const CheckoutPage = ({ searchParams }: { searchParams: Promise<{ carId: string, startDate: string, endDate: string, loc: string }> }) => {
+const CheckoutContent = () => {
+    const searchParams = useSearchParams()
+    const carId = searchParams.get('carId') || ''
+    const startDate = searchParams.get('startDate') || ''
+    const endDate = searchParams.get('endDate') || ''
+    const loc = searchParams.get('loc') || ''
     const [customerType, setCustomerType] = useState<'physical' | 'juridical'>('physical')
     const [paymentType, setPaymentType] = useState<'online' | 'pickup'>('online')
     const [car, setCar] = useState<CarData | null>(null)
-    const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({
         email: '',
         phone: '',
@@ -28,8 +33,6 @@ const CheckoutPage = ({ searchParams }: { searchParams: Promise<{ carId: string,
         registrationNumber: '',
         address: '',
     })
-    const [params, setParams] = useState<{ carId: string, startDate: string, endDate: string, loc: string } | null>(null)
-    const { carId, startDate, endDate, loc } = use(searchParams)
 
     useEffect(() => {
         const fetchCar = async () => {
@@ -43,8 +46,6 @@ const CheckoutPage = ({ searchParams }: { searchParams: Promise<{ carId: string,
                 setCar(data.car)
             } catch (error) {
                 console.error("Error fetching car:", error)
-            } finally {
-                setLoading(false)
             }
         }
         if (carId) fetchCar()
@@ -307,6 +308,14 @@ const CheckoutPage = ({ searchParams }: { searchParams: Promise<{ carId: string,
                 </div>
             </div>
         </div>
+    )
+}
+
+const CheckoutPage = () => {
+    return (
+        <Suspense fallback={<div className="min-h-screen" />}>
+            <CheckoutContent />
+        </Suspense>
     )
 }
 
