@@ -2,8 +2,21 @@
 
 import { useEffect, useRef, useState } from "react"
 
+interface CarModel {
+    _id: string
+    name: string
+    transmission: string
+    fuel: string
+    price: number
+    class: string
+    category: string
+    location: string
+    images: string[]
+}
+
 
 const AdminPage = () => {
+    const [cars, setCars] = useState<CarModel[] | null>(null)
     const [admin, setAdmin] = useState<object | null>(null)
     const usernameRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
@@ -17,6 +30,49 @@ const AdminPage = () => {
     const categoryRef = useRef<HTMLInputElement>(null)
     const locationRef = useRef<HTMLSelectElement>(null)
 
+    const deleteClickHandler = async (_carId: string) => {
+        if (!confirm("Esti sigur ca vrei sa stergi aceasta masina?")) {
+            return
+        }
+
+
+        const token = await cookieStore.get("token")
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"}/admin/delete-car`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token?.value || "",
+            },
+            body: JSON.stringify({ id: _carId }),
+
+        })
+    }
+
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cars`, {
+                    method: "GET",
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch cars: ${response.status}`)
+                }
+
+                const contentType = response.headers.get("content-type") || ""
+                if (!contentType.includes("application/json")) {
+                    throw new Error("Cars endpoint did not return JSON")
+                }
+
+                const data = await response.json();
+                setCars(data?.cars);
+
+            } catch (error) {
+                console.error("Error fetching cars:", error)
+            }
+        };
+        fetchCars();
+    }, []);
     const submitCarHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData()
@@ -48,7 +104,7 @@ const AdminPage = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"}/admin/upload-car`, {
                 method: "POST",
                 headers: {
-                    Authorization: token?.value || "",
+                    application: "json",
                 },
                 body: formData,
             })
@@ -176,7 +232,38 @@ const AdminPage = () => {
             </div >
             <div className="bg-base-200 flex flex-col gap-5 items-center justify-center m-auto my-6 w-full max-w-xl p-6 rounded">
                 <h1 className="text-2xl font-semibold">Mașinile existente</h1>
-                {/* Aici poți adăuga o listă sau un tabel cu mașinile existente, folosind datele din `admin` */}
+                <div className="w-full flex flex-col gap-3">
+                    {cars?.length ? (
+                        cars.map((car) => (
+                            <div key={car._id} className="bg-base-100 border border-base-300 rounded-lg p-4 flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-20 h-16 rounded overflow-hidden bg-base-200 flex items-center justify-center">
+                                        {car.images?.[0] ? (
+                                            <img
+                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cars/images/${car.images[0]}`}
+                                                alt={car.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : null}
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">{car.name}</p>
+                                        <p className="text-sm opacity-80">{car.category} • {car.location}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="btn btn-error btn-sm"
+                                    onClick={() => deleteClickHandler(car._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-sm opacity-70">Nu există mașini disponibile.</p>
+                    )}
+                </div>
 
             </div>
         </>

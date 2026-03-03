@@ -32,3 +32,9 @@ export const getCarById = async (req: Request, res: Response) => {
 
   return res.json({ car: await CarModel.findById(id) })
 }
+
+export const getAllCars = async (req: Request, res: Response) => {
+  const cars = await CarModel.find()
+
+  return res.status(200).json({ cars })
+}

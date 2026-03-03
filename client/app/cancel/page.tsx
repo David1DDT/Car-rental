@@ -40,12 +40,6 @@ export default function CancelPage() {
                 </div>
 
                 <div className="space-y-3">
-                    <button
-                        onClick={() => router.back()}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors"
-                    >
-                        Înapoi la checkout
-                    </button>
                     <Link href="/">
                         <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold py-3 rounded-lg transition-colors">
                             Înapoi la acasă
