@@ -44,10 +44,10 @@ export default function Home() {
         <div className="relative h-[350px] overflow-hidden sm:h-[420px]">
 
 
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,21,34,0.66),rgba(17,20,24,0.52),rgba(48,20,4,0.62))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,21,34,0.66),rgba(17,20,24,0.52),rgba(26,21,74,0.62))]" />
 
           <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col items-center justify-center px-4 text-center sm:px-6">
-            <p className="text-3xl font-semibold text-[#f4b942] sm:text-4xl">Top oferte Rent a Car</p>
+            <p className="text-3xl font-semibold text-purple-800 sm:text-4xl">Top oferte Rent a Car</p>
             <h1 className="mt-3 text-5xl font-bold tracking-tight text-white sm:text-6xl">
               Rezerva masina chiar azi!
             </h1>

@@ -46,6 +46,7 @@ const AdminPage = () => {
             body: JSON.stringify({ id: _carId }),
 
         })
+        window.location.reload()
     }
 
     useEffect(() => {
@@ -105,10 +106,11 @@ const AdminPage = () => {
                 method: "POST",
                 headers: {
                     application: "json",
+                    Authorization: token?.value || "",
                 },
                 body: formData,
             })
-            window.location.replace("/")
+            window.location.reload()
         } catch (err) {
             console.error(err)
         }
@@ -116,6 +118,7 @@ const AdminPage = () => {
 
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+        const token = await cookieStore.get("token")
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const username = usernameRef.current?.value || formData.get("username")
@@ -129,6 +132,7 @@ const AdminPage = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: token?.value || "",
             },
             body: JSON.stringify({ username, password }),
         })
@@ -202,7 +206,7 @@ const AdminPage = () => {
                     </label>
 
                     <label className="form-control w-full">
-                        <span className="label-text mb-1">Preț (EUR)</span>
+                        <span className="label-text mb-1">Preț (EUR)/zi</span>
                         <input type="number" name="price" placeholder="Ex: 250 €" min="0" step="1" className="input w-full" required ref={priceRef} />
                     </label>
 
