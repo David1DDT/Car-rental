@@ -71,20 +71,20 @@ const CarCards = ({ startDate, endDate, location }: { startDate: string, endDate
                         {/* Details Section */}
                         <div className="p-5 flex flex-col h-full">
                             <h3 className="text-2xl font-bold text-gray-900 mb-1">{car.name}</h3>
-                            <p className="text-sm text-gray-500 mb-4">Class: {car.class}</p>
+                            <p className="text-sm text-gray-500 mb-4">Clasa: {car.class}</p>
 
                             {/* Specs Grid */}
                             <div className="grid grid-cols-2 gap-3 mb-4">
                                 <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
-                                    <p className="text-xs text-gray-600 font-semibold mb-1">TRANSMISSION</p>
+                                    <p className="text-xs text-gray-600 font-semibold mb-1">TRANSMISIE</p>
                                     <p className="text-sm font-bold text-gray-900">{car.transmission}</p>
                                 </div>
                                 <div className="bg-green-50 rounded-lg p-3 border border-green-100">
-                                    <p className="text-xs text-gray-600 font-semibold mb-1">FUEL</p>
+                                    <p className="text-xs text-gray-600 font-semibold mb-1">COMBUSTIBIL</p>
                                     <p className="text-sm font-bold text-gray-900">{car.fuel}</p>
                                 </div>
                                 <div className="bg-amber-50 rounded-lg p-3 border border-amber-100 col-span-2">
-                                    <p className="text-xs text-gray-600 font-semibold mb-1">📍 LOCATION</p>
+                                    <p className="text-xs text-gray-600 font-semibold mb-1">📍 LOCATIE</p>
                                     <p className="text-sm font-bold text-gray-900">{car.location}</p>
                                 </div>
                             </div>
@@ -92,12 +92,12 @@ const CarCards = ({ startDate, endDate, location }: { startDate: string, endDate
                             {/* Price and Button */}
                             <div className="flex items-end justify-between border-t border-gray-200 pt-4">
                                 <div>
-                                    <p className="text-xs text-gray-500 font-semibold mb-1">PRICE PER DAY</p>
+                                    <p className="text-xs text-gray-500 font-semibold mb-1">PREȚ PE ZI</p>
                                     <p className="text-3xl font-bold text-blue-600">${car.price}</p>
                                 </div>
                                 <a href={`/checkout?carId=${car._id}&startDate=${startDate}&endDate=${endDate}&loc=${location}`}>
                                     <button className="btn btn-primary bg-blue-600 border-0 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-lg transition-all">
-                                        Rent Now
+                                        Închiriază acum
                                     </button>
                                 </a>
                             </div>

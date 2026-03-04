@@ -54,6 +54,8 @@ export const createOrder = async (req: Request, res: Response) => {
         return res.status(400).send("invalid params")
     }
 
+    car.reservations?.push({ startDate: d1, endDate: d2 })
+    await car.save()
     return res.status(200).send("order created")
 }
 
@@ -81,7 +83,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                     currency: "eur",
                     product_data: {
                         name: car.name,
-                        images: [`${process.env.BACKEND_URL}/api/cars/images/${car.images[0]}`]
+                        images: []
                     },
                     unit_amount: car.price * 100
                 },
