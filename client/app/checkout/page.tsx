@@ -77,7 +77,7 @@ const CheckoutContent = () => {
             return
         }
         if (paymentType === "online") {
-            const backendUrl = "http://localhost:4000"
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"
 
             console.log({ ...formData, customerType, carId, startDate, endDate, loc })
             const response = await fetch(`${backendUrl}/order/create-checkout-session`, {
