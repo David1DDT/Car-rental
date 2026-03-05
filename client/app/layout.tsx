@@ -21,7 +21,8 @@ export default function RootLayout({
       <body className={titillium.className}>
         <nav className="navbar rounded-box justify-between gap-4 shadow-base-300/20 shadow-sm px-[15%]">
           <div className="navbar-start">
-            <a className="link text-base-content link-neutral text-xl font-bold no-underline" href="/">
+            <img src="./logo.png" alt="Autodomi Logo" className=" h-7 " />
+            <a className="link text-base-content link-neutral text-xl font-bold no-underline pl-2" href="/">
               Autodomi
             </a>
           </div>
