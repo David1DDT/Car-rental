@@ -14,12 +14,19 @@
 
 ### Key Features:
 ✅ **User-Friendly Interface** - Intuitive Next.js frontend with responsive design
+
 ✅ **Car Search & Filtering** - Advanced search with date and location filters
+
 ✅ **Multiple Payment Options** - Stripe integration for secure online payments
+
 ✅ **Admin Dashboard** - Full CRUD operations for car management
+
 ✅ **Reservation System** - Date-based availability checking
+
 ✅ **Image Uploads** - Multiple car image uploads with multer
+
 ✅ **Authentication** - Secure admin login with JWT
+
 ✅ **Responsive Design** - Works on all devices with Tailwind CSS
 
 ## 🛠️ Tech Stack
