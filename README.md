@@ -264,7 +264,7 @@ We welcome contributions from the community! Here's how you can help:
 
 ## 📝 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **UNLicense** - see the [LICENSE](LICENSE) file for details.
 
 ## 👥 Authors & Contributors
 
@@ -347,19 +347,3 @@ We're excited to see what you'll build with Autodomi! Whether you're fixing bugs
 Let's make car rentals easier, faster, and more enjoyable for everyone!
 
 🚀 **Star this repository** to show your support and stay updated with the latest developments!
-```
-
-This comprehensive README.md provides:
-
-1. A compelling overview with clear value proposition
-2. Detailed technical stack information
-3. Step-by-step installation instructions
-4. Practical usage examples with code snippets
-5. Clear project structure visualization
-6. Contribution guidelines for developers
-7. Roadmap of future improvements
-8. Professional formatting with emojis and badges
-9. Environment configuration details
-10. Encouragement for community involvement
-
-The README is designed to attract developers to contribute to the project while providing all necessary information for both new and experienced developers to get started and understand the codebase.
